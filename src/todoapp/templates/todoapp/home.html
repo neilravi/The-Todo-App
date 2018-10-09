@@ -1,0 +1,56 @@
+{% extends 'base.html'%}
+{% block style %}
+	.striker {
+	text-decoration: line-through;
+}
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-10">
+			{% if messages %}
+				{% for message in messages%}
+					<div class="alert alert-success alert-dismissable" role="alert">
+						<button class="close" data-dismiss="alert">
+							<small><sup>x</sup></small>
+						</button>
+						<strong>{{message}}</strong>
+					</div>
+				{% endfor%}
+			{% endif %}
+
+			{% if all_item %}
+			<table class="table table-bordered">
+				{% for things in all_item %}
+					{% if things.complated %}
+					<tr class="striker">
+						<td><a href="{% url 'todoapp:update' things.id %}"><center>{{things.item}}</center></td>
+						<td><center><a href="{% url 'todoapp:uncross' things.id %}">Uncross</a></center></td>
+						<td><center><a href="{%url 'todoapp:delete' things.id %}" class="btn btn-danger">Delete</center></td>
+					</tr>
+					{% else %}
+					<tr>
+						<td><a href="{% url 'todoapp:update' things.id %}"><center>{{things.item}}</a></center></td>
+						<td><center><a href="{% url 'todoapp:cross-off' things.id %}">Cross Off</a></center></td>
+						<td><center><a href="{%url 'todoapp:delete' things.id %}" class="btn btn-danger">Delete</center></td>
+					</tr>
+					{% endif %}	
+
+				{% endfor %}
+			</table>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block createform%}
+	<div class="row">
+		<div class="col-md-10">		
+			<form class="form-inline" method="POST" action=".">
+				{% csrf_token %}
+			    {{form.as_p}}
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Add To List</button>
+			</form>
+		</div>
+	</div>	
+{% endblock %}
